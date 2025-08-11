@@ -40,7 +40,7 @@ class _Environment(MetaClasses.Serializable):
     REPORT_INFO: List[str] = dataclasses.field(default_factory=list)
     JOB_CONFIG: Optional[Job.Config] = None
     TRACEBACKS: List[str] = dataclasses.field(default_factory=list)
-    KV_DATA: Dict[str, Any] = dataclasses.field(default_factory=list)
+    KV_DATA: Dict[str, Any] = dataclasses.field(default_factory=dict)
     name = "environment"
 
     @classmethod

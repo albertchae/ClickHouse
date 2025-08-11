@@ -56,7 +56,7 @@ jobs:
   dockers_build_amd:
     runs-on: [self-hosted, style-checker]
     needs: [config_workflow]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'RG9ja2VycyBCdWlsZCAoYW1kKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'RG9ja2VycyBCdWlsZCAoYW1kKQ==') }}
     name: "Dockers Build (amd)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -94,7 +94,7 @@ jobs:
   dockers_build_arm:
     runs-on: [self-hosted, style-checker-aarch64]
     needs: [config_workflow]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'RG9ja2VycyBCdWlsZCAoYXJtKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'RG9ja2VycyBCdWlsZCAoYXJtKQ==') }}
     name: "Dockers Build (arm)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -132,7 +132,7 @@ jobs:
   build_amd_debug:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFtZF9kZWJ1Zyk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFtZF9kZWJ1Zyk=') }}
     name: "Build (amd_debug)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -170,7 +170,7 @@ jobs:
   build_amd_release:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFtZF9yZWxlYXNlKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFtZF9yZWxlYXNlKQ==') }}
     name: "Build (amd_release)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -208,7 +208,7 @@ jobs:
   build_amd_asan:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFtZF9hc2FuKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFtZF9hc2FuKQ==') }}
     name: "Build (amd_asan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -246,7 +246,7 @@ jobs:
   build_amd_tsan:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFtZF90c2FuKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFtZF90c2FuKQ==') }}
     name: "Build (amd_tsan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -284,7 +284,7 @@ jobs:
   build_amd_msan:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFtZF9tc2FuKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFtZF9tc2FuKQ==') }}
     name: "Build (amd_msan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -322,7 +322,7 @@ jobs:
   build_amd_ubsan:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFtZF91YnNhbik=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFtZF91YnNhbik=') }}
     name: "Build (amd_ubsan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -360,7 +360,7 @@ jobs:
   build_arm_release:
     runs-on: [self-hosted, builder-aarch64]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFybV9yZWxlYXNlKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFybV9yZWxlYXNlKQ==') }}
     name: "Build (arm_release)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -398,7 +398,7 @@ jobs:
   build_arm_asan:
     runs-on: [self-hosted, builder-aarch64]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFybV9hc2FuKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFybV9hc2FuKQ==') }}
     name: "Build (arm_asan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -436,7 +436,7 @@ jobs:
   build_amd_darwin:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFtZF9kYXJ3aW4p') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFtZF9kYXJ3aW4p') }}
     name: "Build (amd_darwin)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -474,7 +474,7 @@ jobs:
   build_arm_darwin:
     runs-on: [self-hosted, builder-aarch64]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'QnVpbGQgKGFybV9kYXJ3aW4p') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFybV9kYXJ3aW4p') }}
     name: "Build (arm_darwin)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -512,7 +512,7 @@ jobs:
   docker_server_image:
     runs-on: [self-hosted, style-checker]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_release, build_arm_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'RG9ja2VyIHNlcnZlciBpbWFnZQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'RG9ja2VyIHNlcnZlciBpbWFnZQ==') }}
     name: "Docker server image"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -550,7 +550,7 @@ jobs:
   docker_keeper_image:
     runs-on: [self-hosted, style-checker]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_release, build_arm_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'RG9ja2VyIGtlZXBlciBpbWFnZQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'RG9ja2VyIGtlZXBlciBpbWFnZQ==') }}
     name: "Docker keeper image"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -588,7 +588,7 @@ jobs:
   install_packages_release:
     runs-on: [self-hosted, style-checker]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW5zdGFsbCBwYWNrYWdlcyAocmVsZWFzZSk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW5zdGFsbCBwYWNrYWdlcyAocmVsZWFzZSk=') }}
     name: "Install packages (release)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -626,7 +626,7 @@ jobs:
   install_packages_aarch64:
     runs-on: [self-hosted, style-checker-aarch64]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_arm_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW5zdGFsbCBwYWNrYWdlcyAoYWFyY2g2NCk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW5zdGFsbCBwYWNrYWdlcyAoYWFyY2g2NCk=') }}
     name: "Install packages (aarch64)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -664,7 +664,7 @@ jobs:
   integration_tests_asan_1_4:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIDEvNCk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIDEvNCk=') }}
     name: "Integration tests (asan, 1/4)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -702,7 +702,7 @@ jobs:
   integration_tests_asan_2_4:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIDIvNCk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIDIvNCk=') }}
     name: "Integration tests (asan, 2/4)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -740,7 +740,7 @@ jobs:
   integration_tests_asan_3_4:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIDMvNCk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIDMvNCk=') }}
     name: "Integration tests (asan, 3/4)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -778,7 +778,7 @@ jobs:
   integration_tests_asan_4_4:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIDQvNCk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIDQvNCk=') }}
     name: "Integration tests (asan, 4/4)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -816,7 +816,7 @@ jobs:
   integration_tests_asan_old_analyzer_1_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgMS82KQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgMS82KQ==') }}
     name: "Integration tests (asan, old analyzer, 1/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -854,7 +854,7 @@ jobs:
   integration_tests_asan_old_analyzer_2_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgMi82KQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgMi82KQ==') }}
     name: "Integration tests (asan, old analyzer, 2/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -892,7 +892,7 @@ jobs:
   integration_tests_asan_old_analyzer_3_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgMy82KQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgMy82KQ==') }}
     name: "Integration tests (asan, old analyzer, 3/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -930,7 +930,7 @@ jobs:
   integration_tests_asan_old_analyzer_4_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgNC82KQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgNC82KQ==') }}
     name: "Integration tests (asan, old analyzer, 4/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -968,7 +968,7 @@ jobs:
   integration_tests_asan_old_analyzer_5_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgNS82KQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgNS82KQ==') }}
     name: "Integration tests (asan, old analyzer, 5/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1006,7 +1006,7 @@ jobs:
   integration_tests_asan_old_analyzer_6_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgNi82KQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKGFzYW4sIG9sZCBhbmFseXplciwgNi82KQ==') }}
     name: "Integration tests (asan, old analyzer, 6/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1044,7 +1044,7 @@ jobs:
   integration_tests_release_1_5:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDEvNSk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDEvNSk=') }}
     name: "Integration tests (release, 1/5)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1082,7 +1082,7 @@ jobs:
   integration_tests_release_2_5:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDIvNSk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDIvNSk=') }}
     name: "Integration tests (release, 2/5)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1120,7 +1120,7 @@ jobs:
   integration_tests_release_3_5:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDMvNSk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDMvNSk=') }}
     name: "Integration tests (release, 3/5)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1158,7 +1158,7 @@ jobs:
   integration_tests_release_4_5:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDQvNSk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDQvNSk=') }}
     name: "Integration tests (release, 4/5)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1196,7 +1196,7 @@ jobs:
   integration_tests_release_5_5:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_release]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDUvNSk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHJlbGVhc2UsIDUvNSk=') }}
     name: "Integration tests (release, 5/5)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1234,7 +1234,7 @@ jobs:
   integration_tests_tsan_1_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_tsan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDEvNik=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDEvNik=') }}
     name: "Integration tests (tsan, 1/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1272,7 +1272,7 @@ jobs:
   integration_tests_tsan_2_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_tsan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDIvNik=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDIvNik=') }}
     name: "Integration tests (tsan, 2/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1310,7 +1310,7 @@ jobs:
   integration_tests_tsan_3_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_tsan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDMvNik=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDMvNik=') }}
     name: "Integration tests (tsan, 3/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1348,7 +1348,7 @@ jobs:
   integration_tests_tsan_4_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_tsan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDQvNik=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDQvNik=') }}
     name: "Integration tests (tsan, 4/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1386,7 +1386,7 @@ jobs:
   integration_tests_tsan_5_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_tsan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDUvNik=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDUvNik=') }}
     name: "Integration tests (tsan, 5/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1424,7 +1424,7 @@ jobs:
   integration_tests_tsan_6_6:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_tsan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDYvNik=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'SW50ZWdyYXRpb24gdGVzdHMgKHRzYW4sIDYvNik=') }}
     name: "Integration tests (tsan, 6/6)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1462,7 +1462,7 @@ jobs:
   stress_test_amd_debug:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_debug]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFtZF9kZWJ1Zyk=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFtZF9kZWJ1Zyk=') }}
     name: "Stress test (amd_debug)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1500,7 +1500,7 @@ jobs:
   stress_test_amd_tsan:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_tsan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFtZF90c2FuKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFtZF90c2FuKQ==') }}
     name: "Stress test (amd_tsan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1538,7 +1538,7 @@ jobs:
   stress_test_arm_asan:
     runs-on: [self-hosted, arm-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_arm_asan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFybV9hc2FuKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFybV9hc2FuKQ==') }}
     name: "Stress test (arm_asan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1576,7 +1576,7 @@ jobs:
   stress_test_amd_ubsan:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_ubsan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFtZF91YnNhbik=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFtZF91YnNhbik=') }}
     name: "Stress test (amd_ubsan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -1614,7 +1614,7 @@ jobs:
   stress_test_amd_msan:
     runs-on: [self-hosted, amd-medium]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm, build_amd_msan]
-    if: ${{ !failure() && !cancelled() && !contains(fromJson(needs.config_workflow.outputs.data).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFtZF9tc2FuKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'U3RyZXNzIHRlc3QgKGFtZF9tc2FuKQ==') }}
     name: "Stress test (amd_msan)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}

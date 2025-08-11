@@ -190,14 +190,16 @@ class Info:
         self.env.dump()
 
     def get_custom_data(self, key=None, source_job="config_workflow"):
-        kv_data = self.env.get_needs_output(job_name=source_job)
+        if self.env.JOB_NAME == Settings.CI_CONFIG_JOB_NAME:
+            kv_data = self.env.KV_DATA
+        else:
+            kv_data = self.env.get_needs_output(job_name=source_job)
         if key:
             return kv_data.get(key, None)
         return kv_data
 
     def get_changed_files(self):
-        custom_data = RunConfig.from_fs(self.env.WORKFLOW_NAME).custom_data
-        return custom_data.get("changed_files", None)
+        return self.get_custom_data().get("changed_files", None)
 
     def store_traceback(self):
         self.env.TRACEBACKS.append(traceback.format_exc())
