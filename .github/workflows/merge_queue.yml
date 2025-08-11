@@ -53,7 +53,7 @@ jobs:
   dockers_build_amd:
     runs-on: [self-hosted, style-checker]
     needs: [config_workflow]
-    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'RG9ja2VycyBCdWlsZCAoYW1kKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') }}
     name: "Dockers Build (amd)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -91,7 +91,7 @@ jobs:
   dockers_build_arm:
     runs-on: [self-hosted, style-checker-aarch64]
     needs: [config_workflow]
-    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'RG9ja2VycyBCdWlsZCAoYXJtKQ==') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') }}
     name: "Dockers Build (arm)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -129,7 +129,7 @@ jobs:
   style_check:
     runs-on: [self-hosted, style-checker-aarch64]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'U3R5bGUgY2hlY2s=') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') }}
     name: "Style check"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -167,7 +167,7 @@ jobs:
   fast_test:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'RmFzdCB0ZXN0') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') }}
     name: "Fast test"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
@@ -205,7 +205,7 @@ jobs:
   build_amd_binary:
     runs-on: [self-hosted, builder]
     needs: [config_workflow, dockers_build_amd, dockers_build_arm]
-    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') && !contains(fromJson(needs.config_workflow.outputs.data.workflow_config).cache_success_base64, 'QnVpbGQgKGFtZF9iaW5hcnkp') }}
+    if: ${{ !cancelled() && !contains(needs.*.outputs.data.pipeline_status, 'failure') }}
     name: "Build (amd_binary)"
     outputs:
       data: ${{ steps.run.outputs.DATA }}
