@@ -4,6 +4,7 @@
 #include <Storages/ObjectStorage/DataLakes/DeltaLakeMetadataDeltaKernel.h>
 #include <Storages/ObjectStorage/DataLakes/DeltaLake/TableSnapshot.h>
 #include <Storages/ObjectStorage/DataLakes/DeltaLake/KernelUtils.h>
+#include <Storages/ObjectStorage/DataLakes/DeltaLake/DeltaLakeStorageSink.h>
 #include <Common/logger_useful.h>
 
 namespace DB
@@ -14,8 +15,9 @@ DeltaLakeMetadataDeltaKernel::DeltaLakeMetadataDeltaKernel(
     StorageObjectStorageConfigurationWeakPtr configuration_,
     ContextPtr context)
     : log(getLogger("DeltaLakeMetadata"))
+    , kernel_helper(DB::getKernelHelper(configuration_.lock(), object_storage))
     , table_snapshot(std::make_shared<DeltaLake::TableSnapshot>(
-            getKernelHelper(configuration_.lock(), object_storage),
+            kernel_helper,
             object_storage,
             context,
             log))
@@ -102,6 +104,13 @@ ReadFromFormatInfo DeltaLakeMetadataDeltaKernel::prepareReadingFromFormat(
     return info;
 }
 
+SinkToStoragePtr createDeltaLakeStorageSink(
+    const DeltaLakeMetadataDeltaKernel & metadata,
+    SharedHeader sample_block,
+    const FormatSettings & format_settings)
+{
+    return std::make_shared<DeltaLakeStorageSink>(metadata, sample_block, format_settings);
+}
 }
 
 #endif

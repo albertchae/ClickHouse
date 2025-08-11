@@ -2328,3 +2328,20 @@ def test_concurrent_queries(started_cluster):
     p.wait()
 
     select(0)
+
+
+def test_writes(started_cluster):
+    instance = started_cluster.instances["node1"]
+    minio_client = started_cluster.minio_client
+    bucket = started_cluster.minio_bucket
+    table_name = randomize_table_name("test_writes")
+    result_file = f"{table_name}_data"
+
+    spark = started_cluster.spark_session
+    spark.sql(f"CREATE TABLE {table_name} USING DELTA LOCATION '/{result_file}'")
+    upload_directory(minio_client, bucket, f"/{result_file}", "")
+
+    instance.query(
+        f"CREATE TABLE {table_name} (id Int32, name String) ENGINE = DeltaLake('http://{started_cluster.minio_ip}:{started_cluster.minio_port}/{bucket}/{result_file}/', 'minio', '{minio_secret_key}')"
+    )
+    instance.query(f"INSERT INTO {table_name} SELECT number, toString(number) FROM numbers(1000)");
