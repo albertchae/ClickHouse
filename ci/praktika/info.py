@@ -186,18 +186,14 @@ class Info:
         return None
 
     def store_custom_data(self, key, value):
-        assert (
-            self.env.JOB_NAME == "Config Workflow"
-        ), "Custom data can be stored only in Config Workflow Job"
-        workflow_config = RunConfig.from_fs(self.env.WORKFLOW_NAME)
-        workflow_config.custom_data[key] = value
-        workflow_config.dump()
+        self.env.KV_DATA[key] = value
+        self.env.dump()
 
-    def get_custom_data(self, key=None):
-        custom_data = RunConfig.from_fs(self.env.WORKFLOW_NAME).custom_data
+    def get_custom_data(self, key=None, source_job="config_workflow"):
+        kv_data = self.env.get_needs_output(job_name=source_job)
         if key:
-            return custom_data.get(key, None)
-        return custom_data
+            return kv_data.get(key, None)
+        return kv_data
 
     def get_changed_files(self):
         custom_data = RunConfig.from_fs(self.env.WORKFLOW_NAME).custom_data

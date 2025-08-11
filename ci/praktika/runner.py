@@ -395,6 +395,23 @@ class Runner:
         # if result.is_error():
         result.set_files([Settings.RUN_LOG])
 
+        # Following logic enables the use case:
+        #   GH Action (CI job) fails - dependee job is not blocked and continue to run.
+        #       Failed job must set special flag on complete with Result(.. status="failure" ..).complete_job(do_not_block_ci=True)
+        job_outputs = env.KV_DATA
+        pipeline_status = Result.Status.SUCCESS
+        if not result.is_ok():
+            if result.ext.get("pipeline_status", "") == Result.Status.SUCCESS:
+                pass
+            else:
+                pipeline_status = Result.Status.FAILED
+        job_outputs["pipeline_status"] = pipeline_status
+        with open(env.JOB_OUTPUT_STREAM, "a", encoding="utf8") as f:
+            print(
+                f"data={job_outputs}",
+                file=f,
+            )
+
         if job.post_hooks:
             sw_ = Utils.Stopwatch()
             results_ = []

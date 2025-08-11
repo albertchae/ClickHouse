@@ -1,3 +1,4 @@
+import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 
@@ -125,11 +126,9 @@ class CacheRunnerHooks:
                         )
 
         print(f"Write config to GH's job output")
-        with open(env.JOB_OUTPUT_STREAM, "a", encoding="utf8") as f:
-            print(
-                f"DATA={workflow_config.to_json()}",
-                file=f,
-            )
+        env.KV_DATA["workflow_config"] = json.loads(workflow_config.to_json())
+        env.dump()
+
         print(f"WorkflowRuntimeConfig: [{workflow_config.to_json(pretty=True)}]")
         print(
             "Dump WorkflowConfig to fs, the next hooks in this job might want to see it"

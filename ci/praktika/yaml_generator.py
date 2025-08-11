@@ -229,11 +229,11 @@ jobs:
 """
 
         TEMPLATE_IF_EXPRESSION = """
-    if: ${{{{ !failure() && !cancelled() && !contains(fromJson(needs.{WORKFLOW_CONFIG_JOB_NAME}.outputs.data).cache_success_base64, '{JOB_NAME_BASE64}') }}}}\
+    if: ${{{{ !failure() && !contains(needs.*.outputs.data.pipeline_status, "failure") && !contains(fromJson(needs.{WORKFLOW_CONFIG_JOB_NAME}.outputs.data.workflow_config).cache_success_base64, '{JOB_NAME_BASE64}') }}}}\
 """
 
         TEMPLATE_IF_EXPRESSION_SKIPPED_OR_SUCCESS = """
-    if: ${{ !failure() && !cancelled() }}\
+    if: ${{ !failure() && !contains(needs.*.outputs.data.pipeline_status, "failure") && !cancelled() }}\
 """
 
         TEMPLATE_IF_EXPRESSION_NOT_CANCELLED = """

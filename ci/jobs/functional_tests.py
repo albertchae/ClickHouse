@@ -294,7 +294,9 @@ def main():
                 )
             os.environ["GLOBAL_TAGS"] = "no-random-settings"
 
-        os.environ["MALLOC_CONF"] = f"prof_active:true,prof_prefix:{temp_dir}/jemalloc_profiles/clickhouse.jemalloc"
+        os.environ["MALLOC_CONF"] = (
+            f"prof_active:true,prof_prefix:{temp_dir}/jemalloc_profiles/clickhouse.jemalloc"
+        )
 
         commands.append(configure_log_export)
 
@@ -446,7 +448,7 @@ def main():
         stopwatch=stop_watch,
         files=CH.logs + debug_files,
         info=job_info,
-    ).complete_job(force_ok_exit=force_ok_exit)
+    ).complete_job(do_not_block_pipeline_on_failure=force_ok_exit)
 
 
 if __name__ == "__main__":

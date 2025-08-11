@@ -40,6 +40,7 @@ class _Environment(MetaClasses.Serializable):
     REPORT_INFO: List[str] = dataclasses.field(default_factory=list)
     JOB_CONFIG: Optional[Job.Config] = None
     TRACEBACKS: List[str] = dataclasses.field(default_factory=list)
+    KV_DATA: Dict[str, Any] = dataclasses.field(default_factory=list)
     name = "environment"
 
     @classmethod
@@ -235,6 +236,16 @@ class _Environment(MetaClasses.Serializable):
                 f"ERROR: Status file [{Settings.WORKFLOW_STATUS_FILE}] does not exist"
             )
             raise RuntimeError()
+
+    @classmethod
+    def get_needs_output(cls, job_name):
+        try:
+            needs = cls.get_needs_statuses()
+        except Exception as e:
+            print(f"ERROR: Failed to read needs data, ex [{e}]")
+            needs = {}
+
+        return needs.get(job_name.lower(), {}).get("outputs", {}).get("data", {})
 
     def get_s3_prefix(self, latest=False):
         return self.get_s3_prefix_static(self.PR_NUMBER, self.BRANCH, self.SHA, latest)
